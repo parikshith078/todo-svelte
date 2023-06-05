@@ -1,6 +1,9 @@
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
 <script lang="ts">
-	let todoItems = [
+	import type { TodoItem } from '$lib/types';
+	import Todo from '$lib/components/Todo.svelte';
+
+	let todoItems: TodoItem[] = [
 		{ value: 'todo1', done: false },
 		{ value: 'todo2', done: false },
 		{ value: 'todo3', done: true }
@@ -15,6 +18,10 @@
 		{ value: 'Active', selected: false },
 		{ value: 'Completed', selected: false }
 	];
+
+	const editTodo = (index: number, value: string) => {
+		todoItems[index].value = value;
+	};
 
 	const add = () => {
 		if (!todoValue || todoValue == '') return;
@@ -55,32 +62,7 @@
 			<div class=" p-4">
 				<ol class="list p-2 text-xl">
 					{#each displayItems as todo, index}
-						<li>
-							<input type="checkbox" bind:checked={todo.done} />
-							<span class="flex-auto">{todo.value}</span>
-							<button
-								type="button"
-								on:click|preventDefault={() => deleteItem(index)}
-								class="btn-icon hover:scale-105"
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="icon icon-tabler icon-tabler-x"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="#fff"
-									fill="none"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								>
-									<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-									<line x1="18" y1="6" x2="6" y2="18" />
-									<line x1="6" y1="6" x2="18" y2="18" />
-								</svg>
-							</button>
-						</li>
+						<Todo {todo} {index} {editTodo} {deleteItem} />
 					{/each}
 					<!-- ... -->
 				</ol>
